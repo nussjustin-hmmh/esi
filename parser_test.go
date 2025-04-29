@@ -20,6 +20,14 @@ func TestParse(t *testing.T) {
 		return esi.Position{Start: start, End: end}
 	}
 
+	attr := func(start, end int, name, value string) esixml.Attr {
+		return esixml.Attr{
+			Position: position(start, end),
+			Name:     esixml.Name{Local: name},
+			Value:    value,
+		}
+	}
+
 	testCases := []struct {
 		Name  string
 		Input string
@@ -276,6 +284,43 @@ func TestParse(t *testing.T) {
 			},
 		},
 		{
+			Name: "choose with extra attributes",
+			Input: `
+				<esi:choose attr1="value1" attr2="value2">
+					<esi:when test="cond1" attr3="value3" attr4="value4"></esi:when>
+					<esi:otherwise attr5="value5" attr6="value6"></esi:otherwise>
+				</esi:choose>
+			`,
+			Nodes: esi.Nodes{
+				&esi.ChooseElement{
+					Position: position(0, 197),
+					Attr: []esixml.Attr{
+						attr(12, 26, "attr1", "value1"),
+						attr(27, 41, "attr2", "value2"),
+					},
+					When: []*esi.WhenElement{
+						{
+							Position: position(48, 112),
+							Attr: []esixml.Attr{
+								attr(71, 85, "attr3", "value3"),
+								attr(86, 100, "attr4", "value4"),
+							},
+							Test:  "cond1",
+							Nodes: esi.Nodes{},
+						},
+					},
+					Otherwise: &esi.OtherwiseElement{
+						Position: position(118, 179),
+						Attr: []esixml.Attr{
+							attr(133, 147, "attr5", "value5"),
+							attr(148, 162, "attr6", "value6"),
+						},
+						Nodes: esi.Nodes{},
+					},
+				},
+			},
+		},
+		{
 			Name:  "comment",
 			Input: `<esi:comment text="some text"/>`,
 			Nodes: esi.Nodes{
@@ -317,6 +362,20 @@ func TestParse(t *testing.T) {
 					End:   14,
 				},
 				Name: nsname("comment"),
+			},
+		},
+		{
+			Name:  "comment with extra attributes",
+			Input: `<esi:comment text="some comment" attr1="value1" attr2="value2"/>`,
+			Nodes: esi.Nodes{
+				&esi.CommentElement{
+					Position: position(0, 64),
+					Attr: []esixml.Attr{
+						attr(33, 47, "attr1", "value1"),
+						attr(48, 62, "attr2", "value2"),
+					},
+					Text: "some comment",
+				},
 			},
 		},
 		{
@@ -437,6 +496,20 @@ func TestParse(t *testing.T) {
 			},
 		},
 		{
+			Name:  "include with extra attributes",
+			Input: `<esi:include src="/test" attr1="value1" attr2="value2"/>`,
+			Nodes: esi.Nodes{
+				&esi.IncludeElement{
+					Position: position(0, 56),
+					Attr: []esixml.Attr{
+						attr(25, 39, "attr1", "value1"),
+						attr(40, 54, "attr2", "value2"),
+					},
+					Source: "/test",
+				},
+			},
+		},
+		{
 			Name:  "inline with fetchable=no",
 			Input: `<esi:inline name="/extra" fetchable="no">extra <esi:choose> content</esi:inline>`,
 			Nodes: esi.Nodes{
@@ -538,6 +611,25 @@ func TestParse(t *testing.T) {
 			},
 		},
 		{
+			Name:  "inline with extra attributes",
+			Input: `<esi:inline name="/test" fetchable="yes" attr1="value1" attr2="value2"></esi:inline>`,
+			Nodes: esi.Nodes{
+				&esi.InlineElement{
+					Position: position(0, 84),
+					Attr: []esixml.Attr{
+						attr(41, 55, "attr1", "value1"),
+						attr(56, 70, "attr2", "value2"),
+					},
+					FragmentName: "/test",
+					Fetchable:    true,
+					Data: esi.RawData{
+						Position: position(71, 71),
+						Bytes:    []byte{},
+					},
+				},
+			},
+		},
+		{
 			Name:  "otherwise outside choose",
 			Input: `<esi:otherwise>something</esi:otherwise>`,
 			Error: &esi.UnexpectedElementError{
@@ -600,6 +692,23 @@ func TestParse(t *testing.T) {
 					End:   12,
 				},
 				Name: nsname("remove"),
+			},
+		},
+		{
+			Name:  "remove with extra attributes",
+			Input: `<esi:remove attr1="value1" attr2="value2"></esi:remove>`,
+			Nodes: esi.Nodes{
+				&esi.RemoveElement{
+					Position: position(0, 55),
+					Attr: []esixml.Attr{
+						attr(12, 26, "attr1", "value1"),
+						attr(27, 41, "attr2", "value2"),
+					},
+					Data: esi.RawData{
+						Position: position(42, 42),
+						Bytes:    []byte{},
+					},
+				},
 			},
 		},
 		{
@@ -782,6 +891,38 @@ func TestParse(t *testing.T) {
 			},
 		},
 		{
+			Name: "try with extra attributes",
+			Input: `
+				<esi:try attr1="value1" attr2="value2">
+					<esi:attempt attr3="value3"></esi:attempt>
+					<esi:except attr4="value4"></esi:except>
+				</esi:try>
+			`,
+			Nodes: esi.Nodes{
+				&esi.TryElement{
+					Position: position(0, 148),
+					Attr: []esixml.Attr{
+						attr(9, 23, "attr1", "value1"),
+						attr(24, 38, "attr2", "value2"),
+					},
+					Attempt: &esi.AttemptElement{
+						Position: position(45, 87),
+						Attr: []esixml.Attr{
+							attr(58, 72, "attr3", "value3"),
+						},
+						Nodes: esi.Nodes{},
+					},
+					Except: &esi.ExceptElement{
+						Position: position(93, 133),
+						Attr: []esixml.Attr{
+							attr(105, 119, "attr4", "value4"),
+						},
+						Nodes: esi.Nodes{},
+					},
+				},
+			},
+		},
+		{
 			Name:  "vars",
 			Input: `<esi:vars>something<esi:comment text="some comment"/></esi:vars>`,
 			Nodes: esi.Nodes{
@@ -843,6 +984,20 @@ func TestParse(t *testing.T) {
 				},
 				Name:     nsname("when"),
 				Expected: nsname("vars"),
+			},
+		},
+		{
+			Name:  "vars with extra attributes",
+			Input: `<esi:vars attr1="value1" attr2="value2"></esi:vars>`,
+			Nodes: esi.Nodes{
+				&esi.VarsElement{
+					Position: position(0, 51),
+					Attr: []esixml.Attr{
+						attr(10, 24, "attr1", "value1"),
+						attr(25, 39, "attr2", "value2"),
+					},
+					Nodes: esi.Nodes{},
+				},
 			},
 		},
 		{

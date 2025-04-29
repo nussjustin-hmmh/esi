@@ -258,7 +258,10 @@ type Position = esixml.Position
 //
 // See https://www.w3.org/TR/esi-lang/, 3.3 try | attempt | except.
 type AttemptElement struct {
-	Position
+	Position Position
+
+	// Attr contains all non-standard attributes specified on the element.
+	Attr []esixml.Attr
 
 	// Nodes contains all child nodes of the element.
 	Nodes Nodes
@@ -273,11 +276,19 @@ func (e *AttemptElement) Name() esixml.Name {
 	return esixml.Name{Space: "esi", Local: "attempt"}
 }
 
+// Pos returns the start and end position of the element.
+func (e *AttemptElement) Pos() (start, end int) {
+	return e.Position.Pos()
+}
+
 // ChooseElement represents a <esi:choose> element.
 //
 // See https://www.w3.org/TR/esi-lang/, 3.2 choose | when | otherwise.
 type ChooseElement struct {
-	Position
+	Position Position
+
+	// Attr contains all non-standard attributes specified on the element.
+	Attr []esixml.Attr
 
 	// When contains all <esi:when> nodes included in the element.
 	When []*WhenElement
@@ -295,11 +306,19 @@ func (e *ChooseElement) Name() esixml.Name {
 	return esixml.Name{Space: "esi", Local: "choose"}
 }
 
+// Pos returns the start and end position of the element.
+func (e *ChooseElement) Pos() (start, end int) {
+	return e.Position.Pos()
+}
+
 // CommentElement represents a <esi:comment> element.
 //
 // See https://www.w3.org/TR/esi-lang/, 3.4 comment.
 type CommentElement struct {
-	Position
+	Position Position
+
+	// Attr contains all non-standard attributes specified on the element.
+	Attr []esixml.Attr
 
 	// Text contains the comment text.
 	Text string
@@ -314,11 +333,19 @@ func (e *CommentElement) Name() esixml.Name {
 	return esixml.Name{Space: "esi", Local: "comment"}
 }
 
+// Pos returns the start and end position of the element.
+func (e *CommentElement) Pos() (start, end int) {
+	return e.Position.Pos()
+}
+
 // ExceptElement represents a <esi:except> element.
 //
 // See https://www.w3.org/TR/esi-lang/, 3.3 try | attempt | except.
 type ExceptElement struct {
-	Position
+	Position Position
+
+	// Attr contains all non-standard attributes specified on the element.
+	Attr []esixml.Attr
 
 	// Nodes contains all child nodes of the element.
 	Nodes Nodes
@@ -333,11 +360,19 @@ func (e *ExceptElement) Name() esixml.Name {
 	return esixml.Name{Space: "esi", Local: "except"}
 }
 
+// Pos returns the start and end position of the element.
+func (e *ExceptElement) Pos() (start, end int) {
+	return e.Position.Pos()
+}
+
 // IncludeElement represents a <esi:include> element.
 //
 // See https://www.w3.org/TR/esi-lang/, 3.1 include.
 type IncludeElement struct {
-	Position
+	Position Position
+
+	// Attr contains all non-standard attributes specified on the element.
+	Attr []esixml.Attr
 
 	// Alt contains the alternative source that should be included, if the normal source is unavailable.
 	Alt string
@@ -358,11 +393,19 @@ func (e *IncludeElement) Name() esixml.Name {
 	return esixml.Name{Space: "esi", Local: "include"}
 }
 
+// Pos returns the start and end position of the element.
+func (e *IncludeElement) Pos() (start, end int) {
+	return e.Position.Pos()
+}
+
 // InlineElement represents a <esi:inline> element.
 //
 // See https://www.w3.org/TR/esi-lang/, 3.2 inline.
 type InlineElement struct {
-	Position
+	Position Position
+
+	// Attr contains all non-standard attributes specified on the element.
+	Attr []esixml.Attr
 
 	// Name contains the name of the fragment.
 	FragmentName string
@@ -383,11 +426,19 @@ func (e *InlineElement) Name() esixml.Name {
 	return esixml.Name{Space: "esi", Local: "inline"}
 }
 
+// Pos returns the start and end position of the element.
+func (e *InlineElement) Pos() (start, end int) {
+	return e.Position.Pos()
+}
+
 // OtherwiseElement represents a <esi:otherwise> element.
 //
 // See https://www.w3.org/TR/esi-lang/, 3.2 choose | when | otherwise.
 type OtherwiseElement struct {
-	Position
+	Position Position
+
+	// Attr contains all non-standard attributes specified on the element.
+	Attr []esixml.Attr
 
 	// Nodes contains all child nodes of the element.
 	Nodes Nodes
@@ -400,6 +451,11 @@ func (*OtherwiseElement) node() {}
 // Name returns the element name.
 func (e *OtherwiseElement) Name() esixml.Name {
 	return esixml.Name{Space: "esi", Local: "otherwise"}
+}
+
+// Pos returns the start and end position of the element.
+func (e *OtherwiseElement) Pos() (start, end int) {
+	return e.Position.Pos()
 }
 
 // RawData represents raw, unprocessed data.
@@ -423,7 +479,10 @@ func (r *RawData) Pos() (start, end int) {
 //
 // See https://www.w3.org/TR/esi-lang/, 3.5 remove.
 type RemoveElement struct {
-	Position
+	Position Position
+
+	// Attr contains all non-standard attributes specified on the element.
+	Attr []esixml.Attr
 
 	// Data contains the unprocessed data of the element.
 	Data RawData
@@ -438,11 +497,19 @@ func (e *RemoveElement) Name() esixml.Name {
 	return esixml.Name{Space: "esi", Local: "remove"}
 }
 
+// Pos returns the start and end position of the element.
+func (e *RemoveElement) Pos() (start, end int) {
+	return e.Position.Pos()
+}
+
 // TryElement represents a <esi:try> element.
 //
 // See https://www.w3.org/TR/esi-lang/, 3.3 try | attempt | except.
 type TryElement struct {
-	Position
+	Position Position
+
+	// Attr contains all non-standard attributes specified on the element.
+	Attr []esixml.Attr
 
 	// Attempt contains the nodes that should be attempted to be rendered.
 	Attempt *AttemptElement // attempt
@@ -460,11 +527,19 @@ func (e *TryElement) Name() esixml.Name {
 	return esixml.Name{Space: "esi", Local: "try"}
 }
 
+// Pos returns the start and end position of the element.
+func (e *TryElement) Pos() (start, end int) {
+	return e.Position.Pos()
+}
+
 // VarsElement represents a <esi:vars> element.
 //
 // See https://www.w3.org/TR/esi-lang/, 3.6 vars.
 type VarsElement struct {
-	Position
+	Position Position
+
+	// Attr contains all non-standard attributes specified on the element.
+	Attr []esixml.Attr
 
 	// Nodes contains all child nodes of the element.
 	Nodes Nodes
@@ -479,11 +554,19 @@ func (e *VarsElement) Name() esixml.Name {
 	return esixml.Name{Space: "esi", Local: "vars"}
 }
 
+// Pos returns the start and end position of the element.
+func (e *VarsElement) Pos() (start, end int) {
+	return e.Position.Pos()
+}
+
 // WhenElement represents a <esi:when> element.
 //
 // See https://www.w3.org/TR/esi-lang/, 3.2 choose | when | otherwise.
 type WhenElement struct {
-	Position
+	Position Position
+
+	// Attr contains all non-standard attributes specified on the element.
+	Attr []esixml.Attr
 
 	// Test contains the condition for the element.
 	Test string
@@ -499,6 +582,11 @@ func (*WhenElement) node() {}
 // Name returns the element name.
 func (e *WhenElement) Name() esixml.Name {
 	return esixml.Name{Space: "esi", Local: "when"}
+}
+
+// Pos returns the start and end position of the element.
+func (e *WhenElement) Pos() (start, end int) {
+	return e.Position.Pos()
 }
 
 type parser struct {
@@ -645,11 +733,20 @@ func (p *parser) exit() Nodes {
 	return nodes
 }
 
-func getAttr(attrs []esixml.Attr, name string) (esixml.Attr, bool) {
-	for _, attr := range attrs {
-		if attr.Name.Space == "" && attr.Name.Local == name {
-			return attr, true
+func takeAttr(attrs *[]esixml.Attr, name string) (esixml.Attr, bool) {
+	for i, attr := range *attrs {
+		if attr.Name.Space != "" || attr.Name.Local != name {
+			continue
 		}
+
+		// Do not keep the backing array if not needed anymore
+		if len(*attrs) == 1 {
+			*attrs = nil
+		} else {
+			*attrs = slices.Delete(*attrs, i, i+1)
+		}
+
+		return attr, true
 	}
 	return esixml.Attr{}, false
 }
@@ -664,7 +761,7 @@ func (p *parser) parseAttemptElement() error {
 		return &UnexpectedElementError{Position: tok.Position, Name: tok.Name}
 	}
 
-	p.pushAndEnter(&AttemptElement{Position: tok.Position})
+	p.pushAndEnter(&AttemptElement{Position: tok.Position, Attr: tok.Attr})
 	p.stateFn = (*parser).parseDataOrElement
 	return nil
 }
@@ -676,7 +773,7 @@ func (p *parser) parseAttemptElementEnd() error {
 	}
 
 	parent, _ := p.currentParent().(*AttemptElement)
-	parent.End = tok.Position.End
+	parent.Position.End = tok.Position.End
 	parent.Nodes = p.exit()
 
 	p.stateFn = (*parser).parseDataOrElement
@@ -693,7 +790,7 @@ func (p *parser) parseChooseElement() error {
 		return &EmptyElementError{Position: tok.Position, Name: tok.Name}
 	}
 
-	p.pushAndEnter(&ChooseElement{Position: tok.Position})
+	p.pushAndEnter(&ChooseElement{Position: tok.Position, Attr: tok.Attr})
 	p.stateFn = (*parser).parseDataOrElement
 	return nil
 }
@@ -705,7 +802,7 @@ func (p *parser) parseChooseElementEnd() error {
 	}
 
 	parent, _ := p.currentParent().(*ChooseElement)
-	parent.End = tok.Position.End
+	parent.Position.End = tok.Position.End
 
 	nodes := p.exit()
 
@@ -741,13 +838,14 @@ func (p *parser) parseCommentElement() error {
 		return &UnclosedElementError{Position: tok.Position, Name: tok.Name}
 	}
 
-	text, ok := getAttr(tok.Attr, "text")
+	text, ok := takeAttr(&tok.Attr, "text")
 	if !ok {
 		return &MissingAttributeError{Position: tok.Position, Element: tok.Name, Attribute: esixml.Name{Local: "text"}}
 	}
 
 	p.push(&CommentElement{
 		Position: tok.Position,
+		Attr:     tok.Attr,
 		Text:     text.Value,
 	})
 
@@ -871,7 +969,7 @@ func (p *parser) parseExceptElement() error {
 		return &UnexpectedElementError{Position: tok.Position, Name: tok.Name}
 	}
 
-	p.pushAndEnter(&ExceptElement{Position: tok.Position})
+	p.pushAndEnter(&ExceptElement{Position: tok.Position, Attr: tok.Attr})
 	p.stateFn = (*parser).parseDataOrElement
 	return nil
 }
@@ -883,7 +981,7 @@ func (p *parser) parseExceptElementEnd() error {
 	}
 
 	parent, _ := p.currentParent().(*ExceptElement)
-	parent.End = tok.Position.End
+	parent.Position.End = tok.Position.End
 	parent.Nodes = p.exit()
 
 	p.stateFn = (*parser).parseDataOrElement
@@ -900,9 +998,9 @@ func (p *parser) parseIncludeElement() error {
 		return &UnclosedElementError{Position: tok.Position, Name: tok.Name}
 	}
 
-	alt, _ := getAttr(tok.Attr, "alt")
+	alt, _ := takeAttr(&tok.Attr, "alt")
 
-	onError, ok := getAttr(tok.Attr, "onerror")
+	onError, ok := takeAttr(&tok.Attr, "onerror")
 	if ok && onError.Value != string(ErrorBehaviourContinue) {
 		return &InvalidAttributeValueError{
 			Position: Position{Start: onError.Position.Start, End: onError.Position.End},
@@ -915,13 +1013,14 @@ func (p *parser) parseIncludeElement() error {
 		}
 	}
 
-	src, ok := getAttr(tok.Attr, "src")
+	src, ok := takeAttr(&tok.Attr, "src")
 	if !ok {
 		return &MissingAttributeError{Position: tok.Position, Element: tok.Name, Attribute: esixml.Name{Local: "src"}}
 	}
 
 	p.push(&IncludeElement{
 		Position: tok.Position,
+		Attr:     tok.Attr,
 		Alt:      alt.Value,
 		OnError:  ErrorBehaviour(onError.Value),
 		Source:   src.Value,
@@ -937,12 +1036,12 @@ func (p *parser) parseInlineElement() error {
 		return err
 	}
 
-	name, ok := getAttr(tok.Attr, "name")
+	name, ok := takeAttr(&tok.Attr, "name")
 	if !ok {
 		return &MissingAttributeError{Position: tok.Position, Element: tok.Name, Attribute: esixml.Name{Local: "name"}}
 	}
 
-	fetchable, ok := getAttr(tok.Attr, "fetchable")
+	fetchable, ok := takeAttr(&tok.Attr, "fetchable")
 	if !ok {
 		return &MissingAttributeError{Position: tok.Position, Element: tok.Name, Attribute: esixml.Name{Local: "fetchable"}}
 	}
@@ -963,7 +1062,12 @@ func (p *parser) parseInlineElement() error {
 		return &EmptyElementError{Position: tok.Position, Name: tok.Name}
 	}
 
-	e := &InlineElement{Position: tok.Position, FragmentName: name.Value, Fetchable: fetchable.Value == "yes"}
+	e := &InlineElement{
+		Position:     tok.Position,
+		Attr:         tok.Attr,
+		FragmentName: name.Value,
+		Fetchable:    fetchable.Value == "yes",
+	}
 	e.Data.Position.Start = tok.Position.End
 
 	p.pushAndEnter(e)
@@ -980,7 +1084,7 @@ func (p *parser) parseInlineElement() error {
 
 		e.Data.Bytes = slices.Clone(p.data[e.Data.Position.Start:tok.Position.Start])
 		e.Data.Position.End = tok.Position.Start
-		e.End = tok.Position.End
+		e.Position.End = tok.Position.End
 		p.exit()
 		break
 	}
@@ -999,7 +1103,7 @@ func (p *parser) parseOtherwiseElement() error {
 		return &UnexpectedElementError{Position: tok.Position, Name: tok.Name}
 	}
 
-	p.pushAndEnter(&OtherwiseElement{Position: tok.Position})
+	p.pushAndEnter(&OtherwiseElement{Position: tok.Position, Attr: tok.Attr})
 	p.stateFn = (*parser).parseDataOrElement
 	return nil
 }
@@ -1011,7 +1115,7 @@ func (p *parser) parseOtherwiseElementEnd() error {
 	}
 
 	parent, _ := p.currentParent().(*OtherwiseElement)
-	parent.End = tok.Position.End
+	parent.Position.End = tok.Position.End
 	parent.Nodes = p.exit()
 
 	p.stateFn = (*parser).parseDataOrElement
@@ -1028,7 +1132,7 @@ func (p *parser) parseRemoveElement() error {
 		return &EmptyElementError{Position: tok.Position, Name: tok.Name}
 	}
 
-	e := &RemoveElement{Position: tok.Position}
+	e := &RemoveElement{Position: tok.Position, Attr: tok.Attr}
 	e.Data.Position.Start = tok.Position.End
 
 	p.pushAndEnter(e)
@@ -1045,7 +1149,7 @@ func (p *parser) parseRemoveElement() error {
 
 		e.Data.Bytes = slices.Clone(p.data[e.Data.Position.Start:tok.Position.Start])
 		e.Data.Position.End = tok.Position.Start
-		e.End = tok.Position.End
+		e.Position.End = tok.Position.End
 		p.exit()
 		break
 	}
@@ -1064,7 +1168,7 @@ func (p *parser) parseTryElement() error {
 		return &EmptyElementError{Position: tok.Position, Name: tok.Name}
 	}
 
-	p.pushAndEnter(&TryElement{Position: tok.Position})
+	p.pushAndEnter(&TryElement{Position: tok.Position, Attr: tok.Attr})
 	p.stateFn = (*parser).parseDataOrElement
 	return nil
 }
@@ -1076,7 +1180,7 @@ func (p *parser) parseTryElementEnd() error {
 	}
 
 	parent, _ := p.currentParent().(*TryElement)
-	parent.End = tok.Position.End
+	parent.Position.End = tok.Position.End
 
 	nodes := p.exit()
 
@@ -1119,7 +1223,7 @@ func (p *parser) parseVarsElement() error {
 		return &EmptyElementError{Position: tok.Position, Name: tok.Name}
 	}
 
-	e := &VarsElement{Position: tok.Position}
+	e := &VarsElement{Position: tok.Position, Attr: tok.Attr}
 
 	p.pushAndEnter(e)
 	p.stateFn = (*parser).parseDataOrElement
@@ -1133,7 +1237,7 @@ func (p *parser) parseVarsElementEnd() error {
 	}
 
 	parent, _ := p.currentParent().(*VarsElement)
-	parent.End = tok.Position.End
+	parent.Position.End = tok.Position.End
 	parent.Nodes = p.exit()
 
 	p.stateFn = (*parser).parseDataOrElement
@@ -1150,12 +1254,12 @@ func (p *parser) parseWhenElement() error {
 		return &UnexpectedElementError{Position: tok.Position, Name: tok.Name}
 	}
 
-	test, ok := getAttr(tok.Attr, "test")
+	test, ok := takeAttr(&tok.Attr, "test")
 	if !ok {
 		return &MissingAttributeError{Position: tok.Position, Element: tok.Name, Attribute: esixml.Name{Local: "test"}}
 	}
 
-	p.pushAndEnter(&WhenElement{Position: tok.Position, Test: test.Value})
+	p.pushAndEnter(&WhenElement{Position: tok.Position, Attr: tok.Attr, Test: test.Value})
 	p.stateFn = (*parser).parseDataOrElement
 	return nil
 }
@@ -1167,7 +1271,7 @@ func (p *parser) parseWhenElementEnd() error {
 	}
 
 	parent, _ := p.currentParent().(*WhenElement)
-	parent.End = tok.Position.End
+	parent.Position.End = tok.Position.End
 	parent.Nodes = p.exit()
 
 	p.stateFn = (*parser).parseDataOrElement
