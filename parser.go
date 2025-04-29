@@ -600,21 +600,27 @@ type parser struct {
 	stateFn func(*parser) error
 }
 
-var parserPool = sync.Pool{}
+var parserPool = sync.Pool{
+	New: func() any {
+		return &parser{}
+	},
+}
+
+func getParser(data []byte) *parser {
+	p, _ := parserPool.Get().(*parser)
+	p.reset(data)
+	return p
+}
+
+func putParser(p *parser) {
+	p.reset(nil)
+	parserPool.Put(p)
+}
 
 // Parse parses the given []byte and returns all ESI elements as well as any non-ESI data.
 func Parse(data []byte) (Nodes, error) {
-	p, ok := parserPool.Get().(*parser)
-	if !ok {
-		p = &parser{}
-	}
-
-	defer func() {
-		p.reset(nil)
-		parserPool.Put(p)
-	}()
-
-	p.reset(data)
+	p := getParser(data)
+	defer putParser(p)
 
 	for {
 		if err := p.stateFn(p); err != nil {
