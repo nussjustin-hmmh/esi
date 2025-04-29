@@ -539,6 +539,73 @@ func TestReader(t *testing.T) {
 		},
 
 		{
+			Name:  "space before closing >",
+			Input: `<esi:element >`,
+			Tokens: []esixml.Token{
+				{
+					Position: esixml.Position{End: 14},
+					Type:     esixml.TokenTypeStartElement,
+					Name:     esixml.Name{Space: "esi", Local: "element"},
+				},
+			},
+		},
+		{
+			Name:  "space before closing />",
+			Input: `<esi:element />`,
+			Tokens: []esixml.Token{
+				{
+					Position: esixml.Position{End: 15},
+					Type:     esixml.TokenTypeStartElement,
+					Name:     esixml.Name{Space: "esi", Local: "element"},
+					Closed:   true,
+				},
+			},
+		},
+		{
+			Name:  "space after attribute name",
+			Input: `<esi:element attr1 =value1/>`,
+			Tokens: []esixml.Token{
+				{
+					Position: esixml.Position{End: 28},
+					Type:     esixml.TokenTypeStartElement,
+					Name:     esixml.Name{Space: "esi", Local: "element"},
+					Attr: []esixml.Attr{
+						{
+							Position: esixml.Position{Start: 13, End: 26},
+							Name:     esixml.Name{Space: "", Local: "attr1"},
+							Value:    "value1",
+						},
+					},
+					Closed: true,
+				},
+			},
+		},
+		{
+			Name:  "line breaks in element",
+			Input: "<esi:element\nattr1=value1\r\nattr2=\"value2\"\r/>",
+			Tokens: []esixml.Token{
+				{
+					Position: esixml.Position{End: 44},
+					Type:     esixml.TokenTypeStartElement,
+					Name:     esixml.Name{Space: "esi", Local: "element"},
+					Attr: []esixml.Attr{
+						{
+							Position: esixml.Position{Start: 13, End: 25},
+							Name:     esixml.Name{Space: "", Local: "attr1"},
+							Value:    "value1",
+						},
+						{
+							Position: esixml.Position{Start: 27, End: 41},
+							Name:     esixml.Name{Space: "", Local: "attr2"},
+							Value:    "value2",
+						},
+					},
+					Closed: true,
+				},
+			},
+		},
+
+		{
 			Name: "complex",
 			Input: `
 <header>Header</header>
